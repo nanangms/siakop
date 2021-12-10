@@ -9,6 +9,7 @@ use App\Models\User;
 use Auth;
 use Redirect;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class LoginController extends Controller
 {
@@ -55,15 +56,16 @@ class LoginController extends Controller
             if($user->verifikasi == 'Y'){
                 if($user->is_active == 'Y'){
                     if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+                        $user->update([
+                            'last_login_at' => Carbon::now()->toDateTimeString(),
+                            'last_login_ip' => $request->getClientIp()
+                        ]);
                         // Authentication passed...
                         if(Auth::user()->role->nama_role == 'Admin' or Auth::user()->role->nama_role == 'Super Admin'){
                             return redirect()->intended('/home');
-                        }elseif(Auth::user()->role->nama_role == 'Admin Gudep'){
-                            return redirect()->intended('/gudep/dashboard');
-                        }elseif(Auth::user()->role->nama_role == 'Kwarcab'){
-                            return redirect()->intended('/kwarcab/dashboard');
                         }else{
-                            return redirect()->intended('/kwaran/dashboard');
+                            return redirect()->intended('/home');
+                        
                         }
                     }else{
                         return redirect()->back()->withErrors('Maaf password salah');

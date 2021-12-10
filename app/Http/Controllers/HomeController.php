@@ -3,16 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Gudep;
-use App\Models\Anggota_gudep;
-use App\Models\Berita;
-use App\Models\Kwaran;
-use App\Models\Anggotakwaran;
-use App\Models\Anggotakwarcab;
-use App\Models\Penguruskwaran;
-use App\Models\Mabiran;
-use App\Models\Lpk;
-use App\Models\Dewankerjakwaran;
 
 class HomeController extends Controller
 {
@@ -23,7 +13,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'verified']);
     }
 
     /**

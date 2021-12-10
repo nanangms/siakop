@@ -21,10 +21,11 @@
   background-size: cover;">
 <div class="login-box">
   <!-- /.login-logo -->
-  <div class="card card-outline card-orange">
+  <div class="card card-outline card-danger">
     <div class="card-header text-center">
       <!-- <img src="{{asset('images/logo_pramuka.png')}}" width="100%"> -->
       <h3>SIAKOP</h3> 
+      <h4>Sistem Informasi Akuntansi Koperasi</h4>
     </div>
     <div class="card-body">
       <p class="login-box-msg">Silahkan Masuk</p>
@@ -51,7 +52,7 @@
             <span class="text-danger" role="alert">
                 {{ $message }}
             </span>
-        @enderror
+          @enderror
         </div>
         <div class="input-group mb-3">
           <input type="password" class="form-control" name="password" placeholder="Password" required>
@@ -93,7 +94,7 @@
         <a href="{{ route('password.request') }}">Lupa password?</a>
       </p> 
       <hr>
-      <small>©2021 |Support by : <a href="https://diskominfo.jambikota.go.id/" target="_blank">Diskominfo Kota Jambi</a></small>
+      <small>©2021 SIAKOP | Support by : <a href="https://diskominfo.jambikota.go.id/" target="_blank">Diskominfo Kota Jambi</a></small>
     </div>
     <!-- /.card-body -->
   </div>
@@ -107,5 +108,25 @@
 <script src="{{ asset('admin/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <!-- AdminLTE App -->
 <script src="{{ asset('admin/dist/js/adminlte.min.js') }}"></script>
+<!-- Sweet alert -->
+<script src="{{asset('sweetalert/sweetalert.min.js')}}"></script>
+
+<script>
+//flash message
+  @if(session()->has('sukses'))
+  swal({
+    icon: "success",
+    title: "BERHASIL!",
+    text: "{{ session('sukses') }}",
+    buttons: true,
+  });
+  @elseif(session()->has('gagal'))
+  swal({
+    icon: "error",
+    title: "GAGAL!",
+    text: "{{ session('gagal') }}",
+  });
+  @endif
+</script>
 </body>
 </html>

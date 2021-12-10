@@ -25,7 +25,9 @@ class User extends Authenticatable
         'password',
         'role_id',
         'verifikasi',
-        'photo',
+        'kode_verifikasi',
+        'last_login_at',
+        'last_login_ip',
         'is_active','uuid','gudep_id'
     ];
 
@@ -59,15 +61,5 @@ class User extends Authenticatable
     public function role()
     {
         return $this->belongsTo(Role::class);
-    }
-
-    public function gudep()
-    {
-        return $this->belongsTo(Gudep::class);
-    }
-
-    public function kwaran()
-    {
-        return $this->belongsTo(Kwaran::class);
     }
 }

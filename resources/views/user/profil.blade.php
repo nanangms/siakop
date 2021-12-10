@@ -41,7 +41,7 @@ Profil User
               <div class="form-group row {{$errors->has('photo') ? ' has-error':''}}">
                 <label class="label-text col-lg-3 col-form-label text-md-right">Foto Profil</label>
                 <div class="col-lg-9">
-                    <input type="file" class="form-control" name="photo"/>
+                    <input type="file" class="form-control form-control-sm" name="photo"/>
                     <span class="text-info">Max Size : 5mb</span>
                     @if($errors->has('photo'))
                         <span class="text-danger">{{$errors->first('photo')}}</span>

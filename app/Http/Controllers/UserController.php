@@ -7,11 +7,10 @@ use DataTables;
 use App\Models\User;
 use App\Models\Role;
 use DB;
-use Illuminate\Support\Facades\Hash;
 use File;
-use Intervention\Image\ImageManagerStatic as Image;
-
 use Auth;
+use Intervention\Image\ImageManagerStatic as Image;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -31,9 +30,9 @@ class UserController extends Controller
         return view('user.index',compact(['role']));
     }
 
-    public function user_gudep()
+    public function anggota()
     {
-        return view('user.user_gudep');
+        return view('user.anggota');
     }
 
     public function dataTable()
@@ -76,9 +75,9 @@ class UserController extends Controller
             ->make(true);
     }
 
-    public function dataTable_gudep()
+    public function dataTable_anggota()
     {
-        $user = User::select('users.*')->with('gudep')->where('role_id', '3')->orderby('id','desc')->get();  
+        $user = User::where('role_id', '3')->orderby('id','desc')->get();  
         
         return DataTables::of($user)
             ->addColumn('action', function ($user) {
@@ -123,7 +122,6 @@ class UserController extends Controller
     }
 
     public function add_user(Request $request){
-        //dd($request);
         $this->validate($request,[
             'name'      =>'required',
             'email'     =>'required|email|unique:users',

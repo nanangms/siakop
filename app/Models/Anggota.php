@@ -1,0 +1,20 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use App\Traits\Uuid;
+
+class Anggota extends Model
+{   
+    use Uuid;
+    use HasFactory;
+    protected $table = 'anggota';
+    protected $fillable = ['no_anggota','nama_lengkap','t4_lahir','tgl_lahir','jenis_kelamin','agama_id','alamat','kota','kode_pos','no_hp','keterangan','status'];
+
+    public function agama()
+    {
+        return $this->belongsTo(Agama::class);
+    }
+}

@@ -12,13 +12,12 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-//Route::get('/', 'App\Http\Controllers\IndexController@index');
-Route::get('/', function () {
-    return view('auth.login');
-});
-// Route::get('/button', function () {
-//     return view('email_verifikasi');
-// });
+Route::get('/', 'IndexController@index');
+Route::get('/register-anggota', 'IndexController@register');
+Route::post('/register-anggota/kirim', 'IndexController@register_submit');
+Route::get('/register-anggota/berhasil', 'IndexController@berhasil');
+Route::get('/cek-anggota/{nik}', 'IndexController@cek_anggota');
+Route::get('/register-anggota/confirmation/{code}', 'IndexController@verify')->name('register.confirmation');
 
 
 Route::get('/reload-captcha','App\Http\Controllers\IndexController@reloadCaptcha');
@@ -32,7 +31,7 @@ Route::get('/akses_terbatas', function () {
 
 Auth::routes(['register' => false]);
 
-Route::group(['middleware'=>['auth','checkRole:Admin,Super Admin']],function(){
+Route::group(['middleware'=>['auth','checkRole:Admin,Super Admin,Anggota']],function(){
     Route::group(['prefix'=>'profil'], function(){
         Route::get('/{id}', 'UserController@profil');
         Route::post('/{id}/update', 'UserController@update_profil');
@@ -43,7 +42,10 @@ Route::group(['middleware'=>['auth','checkRole:Admin,Super Admin']],function(){
 Route::group(['middleware'=>['auth','checkRole:Admin,Super Admin']],function(){
     Route::get('/home', 'HomeController@index');
 
+    Route::resource('anggota-koperasi',AnggotaController::class);
+
     Route::group(['prefix'=>'user'], function(){
+        //Administrator
         Route::get('/', 'UserController@index');
         Route::get('/gudep', 'UserController@user_gudep');
         Route::get('/gudep/{id}/verifikasi', 'UserController@verifikasi');
@@ -53,11 +55,17 @@ Route::group(['middleware'=>['auth','checkRole:Admin,Super Admin']],function(){
         Route::get('/{id}/edit', 'UserController@edit');
         Route::post('/{id}/update', 'UserController@update');
         Route::post('/{id}/ganti_password', 'UserController@ganti_password');
+
+        //Anggota Koperasi
+        Route::get('/anggota', 'UserController@anggota');
     });
 
     Route::group(['prefix'=>'data-master'], function(){
         Route::resource('/kabupaten',KabupatenkotaController::class);
         Route::resource('/kategori',KategoriController::class);
+        Route::resource('/agama',AgamaController::class);
+        Route::resource('/jenispinjaman',JenispinjamanController::class);
+        Route::resource('/jenissimpanan',JenissimpananController::class);
     });
     
     Route::group(['prefix'=>'setting'], function(){
@@ -83,10 +91,17 @@ Route::group(['middleware'=>['auth','checkRole:Admin,Super Admin']],function(){
         Route::post('/{id}/update','FaqController@update');
     }); 
 
+    Route::get('/table/anggota', 'AnggotaController@dataTable')->name('table.anggotakoperasi');
+    Route::get('/table/user', 'UserController@dataTable')->name('table.user');
+    Route::get('/table/user/anggota', 'UserController@dataTable_anggota')->name('table.user_anggota');
+
+    //Data Master dan setting
     Route::get('/role/datatable', [App\Http\Controllers\RoleController::class, 'dataTable'])->name('table.role');
     Route::get('/role_menu/datatable', [App\Http\Controllers\RolemenuController::class, 'dataTable'])->name('table.role_menu');
     Route::get('/table/kabupaten', [App\Http\Controllers\KabupatenkotaController::class, 'dataTable'])->name('table.kabupaten');
     Route::get('/table/menu', [App\Http\Controllers\MenuController::class, 'dataTable'])->name('table.menu');
-    Route::get('/table/user', 'UserController@dataTable')->name('table.user');
     Route::get('/table/kategori', [App\Http\Controllers\KategoriController::class, 'dataTable'])->name('table.kategori');
+    Route::get('/table/agama', [App\Http\Controllers\AgamaController::class, 'dataTable'])->name('table.agama');
+    Route::get('/table/jenispinjaman', [App\Http\Controllers\JenispinjamanController::class, 'dataTable'])->name('table.jenispinjaman');
+    Route::get('/table/jenissimpanan', [App\Http\Controllers\JenissimpananController::class, 'dataTable'])->name('table.jenissimpanan');
 });

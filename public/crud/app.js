@@ -30,6 +30,7 @@ $('#modal-btn-save').click(function (event) {
 
     form.find('.text-danger').remove();
     form.find('.form-group').removeClass('has-error');
+    form.find('.form-control').removeClass('is-invalid');
 
     $.ajax({
         url: url,
@@ -41,13 +42,10 @@ $('#modal-btn-save').click(function (event) {
             $('#datatable').DataTable().ajax.reload(null,false);
 
             swal({
-                type: "success",
                 icon: "success",
                 title: "BERHASIL!",
                 text: "Data Berhasil Disimpan",
                 timer: 1500,
-                showConfirmButton: false,
-                showCancelButton: false,
                 buttons: false,
             });
             
@@ -57,9 +55,13 @@ $('#modal-btn-save').click(function (event) {
             if ($.isEmptyObject(res) == false) {
                 $.each(res.errors, function (key, value) {
                     $('#' + key)
-                        .closest('.form-group')
-                        .addClass('has-error')
-                        .append('<small class="text-danger">' + value + '</small>');
+                    .closest('.form-group')
+                    .addClass('has-error')
+                    .append('<small class="text-danger">' + value + '</small>');
+
+                    $('#' + key)
+                    .closest('.form-control')
+                    .addClass('is-invalid');
                 });
                 $('#modal-btn-save').removeAttr('disabled').text('Simpan');
             }
@@ -75,12 +77,12 @@ $('body').on('click', '.btn-delete', function (event) {
         title = me.attr('title'),
         csrf_token = $('meta[name="csrf-token"]').attr('content');
     swal({
-                title: "Anda Yakin?",
-                text: "Mau Menghapus Data : "+ title +"?",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
-            })
+        title: "Anda Yakin?",
+        text: "Mau Menghapus Data : "+ title +"?",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    })
     .then((result) => {
         if (result) {
             $.ajax({
@@ -93,13 +95,10 @@ $('body').on('click', '.btn-delete', function (event) {
                 success: function (response) {
                     $('#datatable').DataTable().ajax.reload(null,false);
                     swal({
-                        type: "success",
                         icon: "success",
                         title: "BERHASIL!",
                         text: "Data Berhasil Dihapus",
                         timer: 1500,
-                        showConfirmButton: false,
-                        showCancelButton: false,
                         buttons: false,
                     });
                 },
@@ -120,7 +119,7 @@ $('body').on('click', '.btn-show', function (event) {
         title = me.attr('title');
 
     $('#modal-title').text(title);
-    $('#modal-btn-save').addClass('hide');
+    $('#modal-btn-save').hide();
 
     $.ajax({
         url: url,

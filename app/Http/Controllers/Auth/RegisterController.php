@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use DB;
 
 class RegisterController extends Controller
 {
@@ -50,7 +51,9 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
+            'anggota_id' =>['required'],
             'name' => ['required', 'string', 'max:255'],
+            'no_hp' =>['required'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
@@ -64,10 +67,24 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $cek = User::where('anggota_id',$data['anggota_id'])->first();
+        //dd($cek);
+        if($cek){
+            return redirect()->back()->with('gagal','Anggota '.$cek->name.' Sudah Punya Akun');
+        }
+
+        $user = User::create([
+            'anggota_id'   => $data['anggota_id'],
             'name' => $data['name'],
             'email' => $data['email'],
+            'no_hp' => $data['no_hp'],
+            'role_id' => '3',
+            'is_active' => 'N',
+            'verifikasi' => 'N',
             'password' => Hash::make($data['password']),
-        ]);
+            ]);
+
+        return $user;
+
     }
 }

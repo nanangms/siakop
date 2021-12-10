@@ -2,7 +2,7 @@
 <div class="modal fade" id="modal">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <div class="modal-header bg-orange">
+      <div class="modal-header bg-danger">
         <h4 class="modal-title" id="modal-title" style="color: white;">Form Input</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
