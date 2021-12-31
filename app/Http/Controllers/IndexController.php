@@ -80,7 +80,8 @@ class IndexController extends Controller
     {
         if(!$code)
         {
-            return "link tidak terdaftar";
+            return redirect('/')->with('gagal','Link tidak terdaftar!');
+            //return "link tidak terdaftar";
         }
  
         $user = User::where('kode_verifikasi', $code)->first();

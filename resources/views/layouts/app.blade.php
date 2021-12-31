@@ -26,7 +26,7 @@
   @include('layouts.topbar')
 
   <!-- Main Sidebar Container -->
-  <aside class="main-sidebar elevation-4 sidebar-light-danger">
+  <aside class="main-sidebar elevation-4 sidebar-light-navy">
     <!-- Brand Logo -->
     <a href="#" class="brand-link navbar-light">
       <img src="{{asset('images/favicon.png')}}" alt="Logo" class="brand-image"> 

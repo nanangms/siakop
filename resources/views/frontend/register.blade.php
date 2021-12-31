@@ -19,17 +19,19 @@ Home
           <div class="card">
             <div class="card-body">
               <h2 align="center">Registrasi Akun Anggota Koperasi</h2>
+              
               <hr>
 
                 <div class="row">
                   <div class="col-md-12">
-                    <x-forms.input_h id="nik" type="text" name="nik" label="NIK" isRequired="true" value=""/>
+                    <x-forms.input_h id="nik" type="text" name="nik" label="NIK" isRequired="true" value="" isReadonly="" placeholder=""/>
                     <div class="form-group row">
                       <label class="label-text col-lg-3 col-form-label text-md-right"></label>
-                      <div class="col-lg-6">
+                      <div class="col-lg-8">
                         <button class="btn btn-primary btn-block" id="cek_nik"><i class="fa fa-search"></i> Cek</button>
                       </div>
                     </div>
+                    <a href="">Belum menjadi anggota? Daftar jadi anggota sekarang, klik disini!</a>
                     <hr>
                     <div id="notfound">
                       <div class="alert alert-danger">
@@ -44,15 +46,15 @@ Home
 
                       <form action="/register-anggota/kirim" method="POST">
                         @csrf
-                        <input type="text" name="anggota_id" value="{{old('anggota_id')}}" id="anggota_id">
-                        <x-forms.input_h id="name" type="text" name="name" label="Nama" isRequired="true" value=""/>
-                        <x-forms.input_h id="no_hp" type="text" name="no_hp" label="No. Hp" isRequired="true" value=""/>
-                        <x-forms.input_h id="email" type="email" name="email" label="Email" isRequired="true" value=""/>
-                        <x-forms.input_h id="password" type="password" name="password" label="Password" isRequired="true" value=""/>
-                        <x-forms.input_h id="konfirmasi_password" type="password" name="konfirmasi_password" label="Konfirmasi Password" isRequired="true" value=""/>
+                        <input type="hidden" name="anggota_id" value="{{old('anggota_id')}}" id="anggota_id">
+                        <x-forms.input_h id="name" type="text" name="name" label="Nama" isRequired="true" value="" isReadonly="" placeholder=""/>
+                        <x-forms.input_h id="no_hp" type="text" name="no_hp" label="No. Hp" isRequired="true" value="" isReadonly="" placeholder=""/>
+                        <x-forms.input_h id="email" type="email" name="email" label="Email" isRequired="true" value="" isReadonly="" placeholder=""/>
+                        <x-forms.input_h id="password" type="password" name="password" label="Password" isRequired="true" value="" isReadonly="" placeholder=""/>
+                        <x-forms.input_h id="konfirmasi_password" type="password" name="konfirmasi_password" label="Konfirmasi Password" isRequired="true" value="" isReadonly="" placeholder=""/>
                         <div class="form-group row">
                           <label class="label-text col-lg-3 col-form-label text-md-right"></label>
-                          <div class="col-lg-6">
+                          <div class="col-lg-8">
                             <button class="btn btn-primary btn-block"><i class="fa fa-save"></i> Daftar</button>
                           </div>
                         </div>
@@ -75,13 +77,11 @@ Home
 
 @endsection
 @section('footer')
+<script src="{{asset('admin/mask_plugin/dist/jquery.mask.min.js')}}"></script>
 <script type="text/javascript">
 $(document).ready(function(){
-  $.ajaxSetup({
-      headers: {
-          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-      }
-  });
+  $('#nik').mask('0000000000000000');
+
 
   if($("#name").val() == ''){
     $("#form-pendaftaran").hide();
@@ -93,20 +93,34 @@ $(document).ready(function(){
 
   $("#cek_nik").click(function(e){
     var nik = $("#nik").val();
-    $.ajax({
-      url:"/cek-anggota/"+nik,
-      success:function(data){
-        $("#form-pendaftaran").slideUp(500).slideDown(500);
-        $("#notfound").slideUp(500);
-        $("#name").val(data.nama_lengkap);
-        $("#anggota_id").val(data.id); 
-      },
-      error:function(){
-        $("#nik").text(nik);  
-        $("#notfound").slideUp(500).slideDown(500);
-        $("#form-pendaftaran").slideUp(500);
+     if(nik.length==0 ){
+        swal({
+            type: "error",
+            icon: "error",
+            title: "GAGAL!",
+            text: "Masukan NIK",
+            timer: 3000,
+            showConfirmButton: false,
+            showCancelButton: false,
+            buttons: false,
+        });
+      }else{
+        $.ajax({
+          url:"/cek-anggota/"+nik,
+          success:function(data){
+            $("#form-pendaftaran").slideUp(500).slideDown(500);
+            $("#notfound").slideUp(500);
+            $("#name").val(data.nama_lengkap);
+            $("#anggota_id").val(data.id); 
+          },
+          error:function(){
+            $("#nik").text(nik);  
+            $("#notfound").slideUp(500).slideDown(500);
+            $("#form-pendaftaran").slideUp(500);
+          }
+        });
       }
-    });
+      
   });
 
 

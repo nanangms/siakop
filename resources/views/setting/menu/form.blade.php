@@ -5,25 +5,25 @@
 
 <div class="form-group">
     <label>Nama Menu</label>
-        {!! Form::text('nama_menu', null, ['class' => 'form-control', 'id' => 'nama_menu','placeholder' =>'Nama Menu']) !!}
+        {!! Form::text('nama_menu', null, ['class' => 'form-control form-control-sm', 'id' => 'nama_menu','placeholder' =>'Nama Menu']) !!}
   
 </div>
 
 <div class="form-group">
     <label>URL</label>
-        {!! Form::text('url', null, ['class' => 'form-control', 'id' => 'url','placeholder' =>'URL']) !!}
+        {!! Form::text('url', null, ['class' => 'form-control form-control-sm', 'id' => 'url','placeholder' =>'URL']) !!}
     
 </div>
 {!! Form::hidden('id_menu', '0', ['class' => 'form-control', 'id' => 'id_menu','placeholder' =>'URL']) !!}
 <div class="form-group">
     <label>Icon</label>
-        {!! Form::text('icon', null, ['class' => 'form-control', 'id' => 'icon','placeholder' =>'Icon']) !!}
+        {!! Form::text('icon', null, ['class' => 'form-control form-control-sm', 'id' => 'icon','placeholder' =>'Icon']) !!}
    
 </div>
 
 <div class="form-group">
     <label>Urutan</label>
-        {!! Form::number('urutan', null, ['class' => 'form-control', 'id' => 'urutan','placeholder' =>'Urutan']) !!}
+        {!! Form::number('urutan', null, ['class' => 'form-control form-control-sm', 'id' => 'urutan','placeholder' =>'Urutan']) !!}
 
 </div>
 

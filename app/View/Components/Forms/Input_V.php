@@ -17,8 +17,10 @@ class Input_V extends Component
     public $name;
     public $value;
     public $isRequired;
+    public $isReadonly;
+    public $placeholder;
 
-    public function __construct($label = "", $id = "", $type = "text", $name = "", $value = "", $isRequired = false)
+    public function __construct($label = "", $id = "", $type = "text", $name = "", $value = "", $isRequired = false, $isReadonly = false,$placeholder = "")
     {
         $this->label = $label;
         $this->id = $id;
@@ -26,6 +28,8 @@ class Input_V extends Component
         $this->name = $name;
         $this->value = $value;
         $this->isRequired = $isRequired;
+        $this->isReadonly = $isReadonly;
+        $this->placeholder = $placeholder;
     }
 
     /**

@@ -26,6 +26,7 @@ Anggota Koperasi
                     <tr>
                         <th>No</th>
                         <th>No. Anggota</th>
+                        <th>NIK</th>
                         <th>Nama Lengkap</th>
                         <th>Tempat, Tanggal Lahir</th>
                         <th>Kota</th> 
@@ -63,6 +64,7 @@ Anggota Koperasi
         columns: [
             {data: 'DT_RowIndex', name: 'id'},
             {data: 'no_anggota', name: 'no_anggota'},
+            {data: 'nik', name: 'nik'},
             {data: 'nama_lengkap', name: 'nama_lengkap'},
             {data: 'ttl', name: 'ttl'},
             {data: 'kota', name: 'kota'},

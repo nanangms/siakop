@@ -24,7 +24,8 @@ Data User Anggota Koperasi
             <th>Nama Pengguna</th>
             <th>Email</th>
             <th>No. HP</th>
-            <th>Status</th>
+            <th>Status Aktif</th>
+            <th>Verifikasi</th>
             <th>Aksi</th>
           </tr>
         </thead>
@@ -35,7 +36,13 @@ Data User Anggota Koperasi
     </x-card>
   </section>
 </div>
+<x-modalsm id="ShowVerivikasi" title="Status User Anggota">
+    <div class="isi"></div>
+</x-modalsm>
 
+<x-modalsm id="ShowDetail" title="Detail User Anggota">
+    <div class="isi_detail"></div>
+</x-modalsm>
 @endsection
 @section('footer')
 <script src="{{asset('admin/plugins/datatables/jquery.dataTables.min.js')}}"></script>
@@ -56,10 +63,11 @@ Data User Anggota Koperasi
         ajax: "{{ route('table.user_anggota') }}",
         columns: [
             {data: 'DT_RowIndex', name: 'id'},
-            {data: 'name', name: 'nama'},
+            {data: 'nama', name: 'nama'},
             {data: 'email', name: 'email'},
             {data: 'no_hp', name: 'no_hp'},
             {data: 'status', name: 'status'},
+            {data: 'verifikasi', name: 'verifikasi'},
             {data: 'action', name: 'action'}
         ]
     });
@@ -98,7 +106,7 @@ Data User Anggota Koperasi
     var id = $(e.relatedTarget).data('target-id');
 
     $.ajax({
-        url: "/user/gudep" +'/' + id +'/verifikasi',
+        url: "/user/anggota" +'/' + id +'/verifikasi',
         dataType: 'html',
         success: function (response) {
             $('.isi').html(response);
@@ -106,13 +114,13 @@ Data User Anggota Koperasi
     });
   });
 
-  $("#ShowEDIT").on("show.bs.modal", function(e) {
+  $("#ShowDetail").on("show.bs.modal", function(e) {
     var id = $(e.relatedTarget).data('target-id');
     $.ajax({
-        url: "/user" +'/' + id +'/edit',
+        url: "/user/anggota" +'/' + id +'/detail',
         dataType: 'html',
         success: function (response) {
-            $('.isi_edit').html(response);
+            $('.isi_detail').html(response);
         }
     });
   });

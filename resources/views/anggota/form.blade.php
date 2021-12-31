@@ -4,10 +4,17 @@
 ]) !!}
 
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-12">
         <div class="form-group">
             <label>No. Anggota <small style="color: red;">*</small></label>
             <input type="text" name="no_anggota" id="no_anggota" class="form-control form-control-sm" placeholder="No. Anggota" value="@if($model->no_anggota == null){{$format}}@else{{str_pad($model->no_anggota,3,'0',STR_PAD_LEFT)}}@endif" readonly>
+        </div>
+    </div>
+    <div class="col-md-6">
+        
+        <div class="form-group">
+            <label>NIK <small style="color: red;">*</small></label>
+            {!! Form::text('nik', null, ['class' => 'form-control form-control-sm', 'id' => 'nik','placeholder' =>'NIK']) !!}
         </div>
         <div class="form-group">
             <label>Nama Lengkap <small style="color: red;">*</small></label>

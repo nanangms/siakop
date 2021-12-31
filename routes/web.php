@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::get('/', 'IndexController@index');
-Route::get('/register-anggota', 'IndexController@register');
+Route::get('/register-akun-anggota', 'IndexController@register');
 Route::post('/register-anggota/kirim', 'IndexController@register_submit');
 Route::get('/register-anggota/berhasil', 'IndexController@berhasil');
 Route::get('/cek-anggota/{nik}', 'IndexController@cek_anggota');
@@ -21,12 +21,15 @@ Route::get('/register-anggota/confirmation/{code}', 'IndexController@verify')->n
 
 
 Route::get('/reload-captcha','App\Http\Controllers\IndexController@reloadCaptcha');
-Route::get('/login', function () {
-    return view('auth.login');
-});
+// Route::get('/login', function () {
+//     return view('auth.login');
+// });
 
 Route::get('/akses_terbatas', function () {
     return view('akses_terbatas');
+});
+Route::get('/notfound', function () {
+    return view('frontend.notfound');
 });
 
 Auth::routes(['register' => false]);
@@ -43,13 +46,39 @@ Route::group(['middleware'=>['auth','checkRole:Admin,Super Admin']],function(){
     Route::get('/home', 'HomeController@index');
 
     Route::resource('anggota-koperasi',AnggotaController::class);
+    Route::get('/get/anggota/{id}', 'AnggotaController@getAnggota')->name('getAnggota');
+    Route::get('/get/bunga/{id}', 'BungapinjamanController@getBunga')->name('getBunga');
+    Route::get('/get/jenis/{id}', 'JenissimpananController@getJenis')->name('getJenissimpanan');
+
+    //Simpanan
+    Route::group(['prefix'=>'simpanan'], function(){
+        Route::get('/','SimpananController@index');
+        Route::get('/cetak-nota/{id}','SimpananController@cetak_nota');
+        Route::get('/cetak-nota/{id}/print','SimpananController@print_nota');
+        Route::get('/tambah','SimpananController@create');
+        Route::get('/perorangan','SimpananController@perorangan');
+        Route::get('/transaksi','SimpananController@transaksi');
+        Route::post('/tambah/submit','SimpananController@store');
+        Route::get('/{id}/delete','SimpananController@delete');
+        Route::get('/{id}/edit','SimpananController@edit');
+        Route::get('/{anggota_id}/detail','SimpananController@detail');
+        Route::post('/{id}/update','SimpananController@update');
+        Route::get('/table/simpanan', 'SimpananController@dataTable')->name('table.simpanan');
+        Route::get('/table/simpanan-anggota/{id}', [App\Http\Controllers\SimpananController::class, 'simpanan_anggota']);
+        Route::get('/table/simpanan-perorangan', [App\Http\Controllers\SimpananController::class, 'DataTableperorangan'])->name('table.simpanan-perorangan');
+    });
+
+    //Pinjaman
+    Route::group(['prefix'=>'pinjaman'], function(){
+        Route::get('/data-pinjaman','PinjamanController@index');
+        Route::get('/tambah','PinjamanController@tambah');
+        Route::get('/tambah/{id}','PinjamanController@tambahjenispinjaman');
+        Route::get('/table/pinjaman', 'PinjamanController@dataTable')->name('table.pinjaman');
+    }); 
 
     Route::group(['prefix'=>'user'], function(){
         //Administrator
-        Route::get('/', 'UserController@index');
-        Route::get('/gudep', 'UserController@user_gudep');
-        Route::get('/gudep/{id}/verifikasi', 'UserController@verifikasi');
-        Route::post('/gudep/{id}/verifikasi_submit', 'UserController@verifikasi_submit');
+        Route::get('/admin', 'UserController@index');
         Route::post('/tambah', 'UserController@add_user');
         Route::get('/{id}/delete', 'UserController@delete');
         Route::get('/{id}/edit', 'UserController@edit');
@@ -58,6 +87,9 @@ Route::group(['middleware'=>['auth','checkRole:Admin,Super Admin']],function(){
 
         //Anggota Koperasi
         Route::get('/anggota', 'UserController@anggota');
+        Route::get('/anggota/{id}/verifikasi', 'UserController@verifikasi');
+        Route::post('/anggota/{id}/verifikasi_submit', 'UserController@verifikasi_submit');
+        Route::get('/anggota/{id}/detail', 'UserController@anggota_detail');
     });
 
     Route::group(['prefix'=>'data-master'], function(){
@@ -66,6 +98,10 @@ Route::group(['middleware'=>['auth','checkRole:Admin,Super Admin']],function(){
         Route::resource('/agama',AgamaController::class);
         Route::resource('/jenispinjaman',JenispinjamanController::class);
         Route::resource('/jenissimpanan',JenissimpananController::class);
+        Route::resource('/bungapinjaman',BungapinjamanController::class);
+
+        Route::get('/identitas-koperasi', 'IdentitaskoperasiController@index');
+        Route::post('/identitas-koperasi/update', 'IdentitaskoperasiController@update');
     });
     
     Route::group(['prefix'=>'setting'], function(){
@@ -104,4 +140,5 @@ Route::group(['middleware'=>['auth','checkRole:Admin,Super Admin']],function(){
     Route::get('/table/agama', [App\Http\Controllers\AgamaController::class, 'dataTable'])->name('table.agama');
     Route::get('/table/jenispinjaman', [App\Http\Controllers\JenispinjamanController::class, 'dataTable'])->name('table.jenispinjaman');
     Route::get('/table/jenissimpanan', [App\Http\Controllers\JenissimpananController::class, 'dataTable'])->name('table.jenissimpanan');
+    Route::get('/table/bungapinjaman', [App\Http\Controllers\BungapinjamanController::class, 'dataTable'])->name('table.bungapinjaman');
 });

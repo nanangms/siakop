@@ -1,5 +1,6 @@
 $('body').on('click', '.modal-show', function (event) {
     event.preventDefault();
+    $('#modal-btn-save').show();
     $('#modal-btn-save').removeAttr('disabled').text('Simpan');
     var me = $(this),
         url = me.attr('href'),

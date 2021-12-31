@@ -19,7 +19,7 @@ User
     <section class="content">
         <x-card judul="Data Pengguna">
             <p align="right">
-                <button data-toggle="modal" data-target="#ShowTambah" class="btn btn-info" title="Tambah"><i class="fa fa-plus"></i> Tambah User</button>
+                <button data-toggle="modal" data-target="#ShowTambah" class="btn btn-primary" title="Tambah"><i class="fa fa-plus"></i> Tambah User</button>
             </p>
             <table id="datatable" class="table table-bordered table-hover table-striped">
                 <thead>

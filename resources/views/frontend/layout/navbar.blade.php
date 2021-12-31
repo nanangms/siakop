@@ -1,5 +1,5 @@
 <!-- Navbar -->
-<nav class="main-header navbar navbar-expand-md navbar-dark navbar-info">
+<nav class="main-header navbar navbar-expand-md navbar-dark navbar-navy">
   <div class="container">
     <a href="/" class="navbar-brand">
       <img src="{{asset('images/favicon.png')}}" alt="Logo Kota Jambi" class="brand-image" style="opacity: .8">
@@ -24,8 +24,8 @@
     <!-- Right navbar links -->
       <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
         <li class="nav-item">
-          <a class="nav-link" href="/register-anggota" role="button">
-            <i class="fas fa-user"></i> Register Anggota
+          <a class="nav-link" href="/register-akun-anggota" role="button">
+            <i class="fas fa-user"></i> Register
           </a>
         </li>
         <li class="nav-item">

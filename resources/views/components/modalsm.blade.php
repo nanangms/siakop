@@ -2,7 +2,7 @@
 <div class="modal fade" id="{{$id}}">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header bg-danger">
+        <div class="modal-header bg-navy">
           <h4 class="modal-title text-white">{{$title}}</h4>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>

@@ -81,16 +81,13 @@ class UserController extends Controller
         
         return DataTables::of($user)
             ->addColumn('action', function ($user) {
+                $detail = '<button data-toggle="modal" data-target-id="'.$user->uuid.'" data-target="#ShowDetail" class="btn btn-info btn-xs" title="Edit"><i class="fa fa-search"></i></button>';
                 $edit = '<button data-toggle="modal" data-target-id="'.$user->uuid.'" data-target="#ShowEDIT" class="btn btn-warning btn-xs" title="Edit"><i class="fa fa-edit"></i></button>';
-                $verifikasi = '<button data-toggle="modal" data-target-id="'.$user->uuid.'" data-target="#ShowVerivikasi" class="btn btn-primary btn-xs" title="Verifikasi"><i class="fa fa-pen" aria-hidden="true"></i></button>';
+                $verifikasi = '<button data-toggle="modal" data-target-id="'.$user->uuid.'" data-target="#ShowVerivikasi" class="btn btn-primary btn-xs" title="Verifikasi"><i class="fa fa-edit" aria-hidden="true"></i></button>';
                 $hapus = '<button class="btn btn-danger btn-xs hapus" user-name="'.$user->name.'" user-id="'.$user->uuid.'" title="Delete"><i class="fa fa-trash"></i></button>';
-                if(auth()->user()->role->nama_role == "Super Admin"){
-                    return $verifikasi.' '.$edit.' '.$hapus;
-                }elseif(auth()->user()->role->nama_role == "Admin"){
-                    return $verifikasi;
-                }else{
-                    return 'No Action';
-                }
+                
+                return $detail.' '.$verifikasi;
+                
             })
 
             ->addColumn('nama', function ($user) {
@@ -133,7 +130,7 @@ class UserController extends Controller
         DB::beginTransaction();
         try{
             $user = new User;
-            $user->gudep_id     = '0';
+            $user->anggota_id     = '0';
             $user->name         = $request->name;
             $user->email        = $request->email;
             $user->no_hp        = $request->no_hp;
@@ -188,17 +185,14 @@ class UserController extends Controller
     }
 
     public function verifikasi_submit(Request $request,$id){
-        $user = User::with('gudep')->where('uuid',$id)->first();
+        $user = User::where('uuid',$id)->first();
         DB::beginTransaction();
         try{
             $user->is_active    = $request->is_active;
             $user->verifikasi   = $request->verifikasi;
             $user->save();
-            if($request->verifikasi == 'Y' and $request->is_active == 'Y'){
-                \Mail::to($user->email)->send(new \App\Mail\PostMail($user->name, $user->gudep->nama_gudep));
-            }
             DB::commit();
-            return redirect('/user/gudep')->with('sukses','Data Berhasil disimpan');
+            return redirect('/user/anggota')->with('sukses','Data Berhasil disimpan');
         }catch (\Exception $e){
             //dd($e);
             DB::rollback();
@@ -305,5 +299,10 @@ class UserController extends Controller
     public function verifikasi($id){
         $user = User::where('uuid',$id)->first();
         return view('user.verifikasi',compact(['user']));
+    }
+
+    public function anggota_detail($id){
+        $user = User::with('anggota')->where('uuid',$id)->first();
+        return view('user.detail_anggota',compact('user'));
     }
 }

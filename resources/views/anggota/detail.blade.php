@@ -1,4 +1,4 @@
-<table class="table table-hover" width="100%">
+<table width="100%">
 	<tr>
 		<td><strong>No. Anggota</strong></td>
 		<td>:</td>
@@ -8,6 +8,11 @@
 		<td><strong>Nama Lengkap</strong></td>
 		<td>:</td>
 		<td>{{$model->nama_lengkap}}</td>
+	</tr>
+	<tr>
+		<td><strong>NIK</strong></td>
+		<td>:</td>
+		<td>{{$model->nik}}</td>
 	</tr>
 	<tr>
 		<td><strong>Jenis Kelamin</strong></td>

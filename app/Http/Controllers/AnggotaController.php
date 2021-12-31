@@ -19,6 +19,11 @@ class AnggotaController extends Controller
         return view('anggota.index');
     }
 
+    public function getAnggota($id = 0){
+        $data = Anggota::where('id',$id)->first();
+        return response()->json($data);
+    }
+
     public function create()
     {
         $model = new Anggota();

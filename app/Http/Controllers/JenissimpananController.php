@@ -23,6 +23,11 @@ class JenissimpananController extends Controller
         return view('data-master.jenissimpanan.index');
     }
 
+    public function getJenis($id = 0){
+        $data = Jenissimpanan::where('id',$id)->first();
+        return response()->json($data);
+    }
+
     /**
      * Show the form for creating a new resource.
      *

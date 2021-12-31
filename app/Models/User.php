@@ -62,4 +62,12 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Role::class);
     }
+
+    public function anggota(){
+        return $this->belongsTo('App\Models\Anggota');
+    }
+
+    public function simpanan(){
+        return $this->hasMany(Simpanan::class);
+    }
 }

@@ -13,4 +13,8 @@ class Jenissimpanan extends Model
 
     protected $table = 'jenissimpanan';
     protected $fillable = ['kode_jenis','posisi','rekening_id','nama_jenis','uuid'];
+
+    public function simpanan(){
+        return $this->hasMany('App\Models\Simpanan');
+    }
 }

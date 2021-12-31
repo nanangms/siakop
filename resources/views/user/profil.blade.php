@@ -18,7 +18,7 @@ Profil User
       <div class="row">
         <div class="col-md-3">
           <!-- Profile Image -->
-          <div class="card card-danger card-outline">
+          <div class="card card-navy card-outline">
             <div class="card-body box-profile">
               <div class="text-center">
                 <img class="profile-user-img img-fluid img-circle" src="{{$user->getAvatarProfil()}}" alt="User profile picture" style="object-fit: cover; position: relative; width: 100px; height: 100px; overflow: hidden;">
@@ -34,13 +34,13 @@ Profil User
           <x-card judul="Edit Profil">
             <form action="/profil/{{$user->uuid}}/update" class="form-horizontal" method="post" enctype="multipart/form-data">
               {{csrf_field()}}
-              <x-forms.input_h id="" type="text" name="name" label="Nama Lengkap" isRequired="true" value="{{$user->name}}"/>
-              <x-forms.input_h id="" type="email" name="email" label="E-mail" isRequired="true" value="{{$user->email}}"/> 
-              <x-forms.input_h id="" type="text" name="no_hp" label="No. Hp" isRequired="false" value="{{$user->no_hp}}"/>
+              <x-forms.input_h id="" type="text" name="name" label="Nama Lengkap" isRequired="true" value="{{$user->name}}" isReadonly="" placeholder=""/>
+              <x-forms.input_h id="" type="email" name="email" label="E-mail" isRequired="true" value="{{$user->email}}" isReadonly="" placeholder=""/> 
+              <x-forms.input_h id="" type="text" name="no_hp" label="No. Hp" isRequired="false" value="{{$user->no_hp}}" isReadonly="" placeholder=""/>
 
               <div class="form-group row {{$errors->has('photo') ? ' has-error':''}}">
                 <label class="label-text col-lg-3 col-form-label text-md-right">Foto Profil</label>
-                <div class="col-lg-9">
+                <div class="col-lg-6">
                     <input type="file" class="form-control form-control-sm" name="photo"/>
                     <span class="text-info">Max Size : 5mb</span>
                     @if($errors->has('photo'))
@@ -62,9 +62,9 @@ Profil User
           <x-card judul="Ganti Password">
             <form action="/profil/ganti_password" method="post">
               @csrf
-              <x-forms.input_h id="" type="password" name="password_lama" label="Password Lama" isRequired="false" value=""/>
-              <x-forms.input_h id="" type="password" name="password" label="Password Baru" isRequired="false" value=""/>
-              <x-forms.input_h id="" type="password" name="password_baru" label="Konfirmasi Password Baru" isRequired="false" value=""/>
+              <x-forms.input_h id="" type="password" name="password_lama" label="Password Lama" isRequired="false" value="" isReadonly="" placeholder=""/>
+              <x-forms.input_h id="" type="password" name="password" label="Password Baru" isRequired="false" value="" isReadonly="" placeholder=""/>
+              <x-forms.input_h id="" type="password" name="password_baru" label="Konfirmasi Password Baru" isRequired="false" value="" isReadonly="" placeholder=""/>
 
               <div class="form-group row">
                 <label class="label-text col-lg-3 col-form-label text-md-right"></label>

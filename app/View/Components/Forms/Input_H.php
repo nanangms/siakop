@@ -17,6 +17,8 @@ class Input_H extends Component
     public $name;
     public $value;
     public $isRequired;
+    public $isReadonly;
+    public $placeholder;
     
     public function __construct(
         $label = "",
@@ -24,7 +26,9 @@ class Input_H extends Component
         $type = "text",
         $name = "",
         $value = "",
-        $isRequired = false
+        $isRequired = false,
+        $isReadonly = false,
+        $placeholder = ""
     )
     {
         $this->label = $label;
@@ -33,6 +37,8 @@ class Input_H extends Component
         $this->name = $name;
         $this->value = $value;
         $this->isRequired = $isRequired;
+        $this->isReadonly = $isReadonly;
+        $this->placeholder = $placeholder;
     }
 
     /**

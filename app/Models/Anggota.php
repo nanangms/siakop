@@ -17,4 +17,16 @@ class Anggota extends Model
     {
         return $this->belongsTo(Agama::class);
     }
+
+    public function simpanan(){
+        return $this->hasMany('App\Models\Simpanan');
+    }
+
+    public function saldoharian(){
+        return $this->hasMany('App\Models\Saldo_harian');
+    }
+
+    public function user(){
+        return $this->hasOne('App\Models\User');
+    }
 }
