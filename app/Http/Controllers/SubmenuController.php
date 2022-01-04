@@ -135,6 +135,10 @@ class SubmenuController extends Controller
     {
         $model = Menu::findOrFail($id);
         $model->delete();
+
+        return response()->json([
+                'status' => 'true',
+                'messages'=> 'Data Berhasil dihapus']);
     }
 
     public function dataTable($id)

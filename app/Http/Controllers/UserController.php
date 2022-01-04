@@ -40,7 +40,7 @@ class UserController extends Controller
         if(auth()->user()->role->nama_role == "Super Admin"){
           $user = User::select('users.*')->with(['role'])->orderby('id','desc')->get();
         }elseif(auth()->user()->role->nama_role == "Admin"){
-          $user = User::select('users.*')->with('role')->whereIn('role_id', [2, 4, 5])->orderby('id','desc')->get();  
+          $user = User::select('users.*')->with('role')->whereIn('role_id', [2, 3, 11])->orderby('id','desc')->get();  
         }
         
         return DataTables::of($user)
@@ -81,7 +81,7 @@ class UserController extends Controller
         
         return DataTables::of($user)
             ->addColumn('action', function ($user) {
-                $detail = '<button data-toggle="modal" data-target-id="'.$user->uuid.'" data-target="#ShowDetail" class="btn btn-info btn-xs" title="Edit"><i class="fa fa-search"></i></button>';
+                $detail = '<button data-toggle="modal" data-target-id="'.$user->uuid.'" data-target="#ShowDetail" class="btn btn-info btn-xs" title="Detail"><i class="fa fa-search"></i></button>';
                 $edit = '<button data-toggle="modal" data-target-id="'.$user->uuid.'" data-target="#ShowEDIT" class="btn btn-warning btn-xs" title="Edit"><i class="fa fa-edit"></i></button>';
                 $verifikasi = '<button data-toggle="modal" data-target-id="'.$user->uuid.'" data-target="#ShowVerivikasi" class="btn btn-primary btn-xs" title="Verifikasi"><i class="fa fa-edit" aria-hidden="true"></i></button>';
                 $hapus = '<button class="btn btn-danger btn-xs hapus" user-name="'.$user->name.'" user-id="'.$user->uuid.'" title="Delete"><i class="fa fa-trash"></i></button>';

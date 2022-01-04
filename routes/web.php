@@ -50,6 +50,11 @@ Route::group(['middleware'=>['auth','checkRole:Admin,Super Admin']],function(){
     Route::get('/get/bunga/{id}', 'BungapinjamanController@getBunga')->name('getBunga');
     Route::get('/get/jenis/{id}', 'JenissimpananController@getJenis')->name('getJenissimpanan');
 
+    Route::get('/get/simpanan-pokok/{anggota_id}', 'SimpananController@getSimpananPokokAnggota');
+    Route::get('/get/simpanan-wajib/{anggota_id}', 'SimpananController@getSimpananWajibAnggota');
+    Route::get('/get/simpanan-sukarela/{anggota_id}', 'SimpananController@getSimpananSukarelaAnggota');
+    Route::get('/get/simpanan-wajib-khusus/{anggota_id}', 'SimpananController@getSimpananKhususAnggota');
+
     //Simpanan
     Route::group(['prefix'=>'simpanan'], function(){
         Route::get('/','SimpananController@index');

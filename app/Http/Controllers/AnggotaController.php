@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use DataTables;
 use App\Models\Anggota;
 use App\Models\Agama;
+use App\Models\Simpanan;
+use App\Models\Pinjaman;
 use DB;
 
 class AnggotaController extends Controller
@@ -43,6 +45,7 @@ class AnggotaController extends Controller
     {
         $this->validate($request, [
             'no_anggota' => 'required',
+            'nik' => 'required|max:16',
             'nama_lengkap' => 'required',
             'jenis_kelamin' => 'required',
             't4_lahir' => 'required',
@@ -57,6 +60,7 @@ class AnggotaController extends Controller
         try{
             $anggota = new Anggota;
             $anggota->no_anggota    = $request->no_anggota;
+            $anggota->nik           = $request->nik;
             $anggota->nama_lengkap  = $request->nama_lengkap;
             $anggota->t4_lahir      = $request->t4_lahir;
             $anggota->tgl_lahir     = $request->tgl_lahir;
@@ -113,7 +117,19 @@ class AnggotaController extends Controller
     public function destroy($id)
     {
         $model = Anggota::where('uuid',$id)->first();
-        $model->delete();
+        $ceksimpanan = Simpanan::where('anggota_id',$model->id)->first();
+        $cekpinjaman = Pinjaman::where('anggota_id',$model->id)->first();
+        if(!$ceksimpanan and !$cekpinjaman){
+            $model->delete();
+            return response()->json([
+                'status' => 'true',
+                'messages'=> 'Berhasil dihapus']);
+        }else{
+            return response()->json([
+                'status' => 'false',
+                'messages'=> 'Terdapat Data Simpanan/Pinjaman, Tidak bisa dihapus']);
+           
+        }
     }
 
     public function dataTable()

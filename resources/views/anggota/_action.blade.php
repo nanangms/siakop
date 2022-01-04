@@ -1,3 +1,3 @@
-<a href="{{ $url_detail }}" class="modal-show btn-show btn btn-info btn-xs" title="Detail Anggota : {{ $model->nama_lengkap }}"><i class="fa fa-eye"></i></a> 
-<a href="{{ $url_edit }}" class="modal-show edit btn btn-warning btn-xs" title="Edit {{ $model->nama_lengkap }}"><i class="fa fa-edit"></i></a> 
-<a href="{{ $url_destroy }}" class="btn-delete btn btn-danger btn-xs" title="{{ $model->nama_lengkap }}"><i class="fa fa-trash-alt"></i></a>
+<a href="{{ $url_detail }}" class="modal-show btn-show btn btn-info btn-xs" title="Detail Anggota : {{ $model->nama_lengkap }}"><i class="fa fa-eye"></i> Detail</a> 
+<a href="{{ $url_edit }}" class="modal-show edit btn btn-warning btn-xs" title="Edit {{ $model->nama_lengkap }}"><i class="fa fa-edit"></i> Edit</a> 
+<a href="{{ $url_destroy }}" class="btn-delete btn btn-danger btn-xs" title="{{ $model->nama_lengkap }}"><i class="fa fa-trash-alt"></i> Hapus</a>

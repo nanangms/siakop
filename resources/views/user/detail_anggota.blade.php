@@ -60,11 +60,20 @@
 		<td>{{$user->anggota->keterangan}}</td>
 	</tr>
 	<tr>
+		<td><strong>Status Anggota</strong></td>
+		<td>:</td>
+		<td>@if($user->anggota->status == 'AKTIF')
+                    <span class="badge badge-success">AKTIF</span>
+                @else
+                    <span class="badge badge-danger">TIDAK AKTIF</span>
+                @endif</td>
+	</tr>
+	<tr>
 		<td colspan="3"><hr></td>
 	</tr>
 	<tr>
 		<td colspan="3">
-			<h4>Detail Pengguna</h4>
+			<h4>Detail Akun Pengguna</h4>
 		</td>
 	</tr>
 	<tr>

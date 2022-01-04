@@ -17,7 +17,8 @@
     <link rel="stylesheet" href="{{asset('admin/dist/css/adminlte.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('jquery-ui/jquery-ui.min.css')}}">
     <link rel="icon" href="{{asset('images/favicon.png')}}">
-    
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     @yield('header')
   </head>
 <body class="hold-transition sidebar-mini text-sm">

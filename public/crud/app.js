@@ -94,14 +94,24 @@ $('body').on('click', '.btn-delete', function (event) {
                     '_token': csrf_token
                 },
                 success: function (response) {
-                    $('#datatable').DataTable().ajax.reload(null,false);
-                    swal({
-                        icon: "success",
-                        title: "BERHASIL!",
-                        text: "Data Berhasil Dihapus",
-                        timer: 1500,
-                        buttons: false,
-                    });
+                    if (response.status == 'true') {
+                        $('#datatable').DataTable().ajax.reload(null,false);
+                        swal({
+                            icon: "success",
+                            title: "BERHASIL!",
+                            text: response.messages,
+                            timer: 1500,
+                            buttons: false,
+                        });
+                    }else{
+                        swal({
+                            icon: "error",
+                            title: "GAGAL!",
+                            text: response.messages,
+                            buttons: true,
+                        });
+
+                    }
                 },
                 error: function (xhr) {
                 	swal("Oops...", "Terjadi Kesalahan", "error");

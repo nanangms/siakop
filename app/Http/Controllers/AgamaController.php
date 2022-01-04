@@ -102,6 +102,9 @@ class AgamaController extends Controller
     {
         $model = Agama::where('uuid',$id)->first();
         $model->delete();
+        return response()->json([
+                'status' => 'true',
+                'messages'=> 'Data Berhasil dihapus']);
     }
 
     public function dataTable()

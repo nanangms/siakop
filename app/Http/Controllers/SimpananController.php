@@ -28,7 +28,9 @@ class SimpananController extends Controller
         $last_record = Simpanan::orderBy('id','desc')->first();
         $no = 1;
 
-        if(date('Y') != substr($last_record->tgl_transaksi,0,4)){
+        if(!$no_urut){
+            $format_notransaksi = sprintf("%04s", $no);
+        }elseif(date('Y') != substr($last_record->tgl_transaksi,0,4)){
             $format_notransaksi = sprintf("%04s", $no);
         }else{
             $format_notransaksi = sprintf("%04s", abs($last_record->no_urut + 1));
@@ -41,7 +43,7 @@ class SimpananController extends Controller
 
     public function store(SimpananRequest $request)
     {
-        $checksaldo = Saldo_harian::where('anggota_id',$request->anggota_id)->orderBy('id','desc')->first();
+        $checksaldo = Saldo_harian::where('anggota_id',$request->anggota_id)->where('jenissimpanan_id',$request->jenissimpanan_id)->orderBy('id','desc')->first();
         $user_id = auth()->user()->id;
         if(!$checksaldo){
             $saldo = str_replace('.', '', $request->jumlah);
@@ -74,6 +76,7 @@ class SimpananController extends Controller
             $saldo_h->simpanan_id       = $data->id;
             $saldo_h->anggota_id        = $request->anggota_id;
             $saldo_h->tgl_transaksi     = $request->tgl_transaksi;
+            $saldo_h->jenissimpanan_id  = $request->jenissimpanan_id;
             $saldo_h->saldo             = $saldo;
             $saldo_h->save();
 
@@ -87,7 +90,12 @@ class SimpananController extends Controller
 
     public function cetak_nota($id){
         $simpanan = Simpanan::with(['anggota','jenissimpanan','user'])->where('uuid',$id)->first();
-        return view('simpanan.cetak_nota',compact('simpanan'));
+        if(!$simpanan){
+            return view('simpanan.cetak_nota_notfound');
+        }else{
+            return view('simpanan.cetak_nota',compact('simpanan'));
+        }
+        
     }
 
     public function print_nota($id){
@@ -140,7 +148,11 @@ class SimpananController extends Controller
     public function detail($anggota_id){
         $id = $anggota_id;
         $anggota = Anggota::with('agama')->where('id',$anggota_id)->first();
-        return view('simpanan.detail',compact('id','anggota'));
+        $simpanan_pokok = Saldo_harian::where([['anggota_id','=' , $anggota->id],['jenissimpanan_id' ,'=' ,1]])->orderBy('id','desc')->first();
+        $simpanan_wajib = Saldo_harian::where([['anggota_id','=' , $anggota->id],['jenissimpanan_id' ,'=' ,2]])->orderBy('id','desc')->first();
+        $simpanan_sukarela = Saldo_harian::where([['anggota_id','=' , $anggota->id],['jenissimpanan_id' ,'=' ,3]])->orderBy('id','desc')->first();
+        $simpanan_wajib_khusus = Saldo_harian::where([['anggota_id','=' , $anggota->id],['jenissimpanan_id' ,'=' ,4]])->orderBy('id','desc')->first();
+        return view('simpanan.detail',compact('id','anggota','simpanan_pokok','simpanan_wajib','simpanan_sukarela','simpanan_wajib_khusus'));
     }
 
     public function edit($id){
@@ -157,6 +169,10 @@ class SimpananController extends Controller
 
         $simpanan->delete();
         $saldo_h->delete();
+
+        return response()->json([
+                'status' => 'true',
+                'messages'=> 'Data Berhasil dihapus']);
     }
 
     public function dataTable()
@@ -169,11 +185,11 @@ class SimpananController extends Controller
                 ->orderBy('a.id','desc');
         return DataTables::of($data)
             ->addColumn('action', function ($data) {
-                $cetaknota = '<a href="/simpanan/cetak-nota/'.$data->uuid.'" class="btn btn-default btn-xs"><i class="fa fa-print"></i></a>';
+                $cetaknota = '<a href="/simpanan/cetak-nota/'.$data->uuid.'" class="btn btn-default btn-xs"><i class="fa fa-print"></i> Cetak</a>';
                 $edit = '<button data-toggle="modal" data-target-id="'.$data->uuid.'" data-target="#ShowEDIT" class="btn btn-warning btn-xs" title="Edit"><i class="fa fa-edit"></i></button>';
-                $hapus = '<button class="btn btn-danger btn-xs hapus" data-name="'.$data->no_transaksi.'" data-id="'.$data->uuid.'" title="Batalkan Transaksi"><i class="fa fa-times"></i></button>';
+                $hapus = '<button class="btn btn-danger btn-xs hapus" data-name="'.$data->no_transaksi.'" data-id="'.$data->uuid.'" title="Batalkan Transaksi"><i class="fa fa-times"></i> Batalkan</button>';
 
-                if(auth()->user()->role->nama_role == "Super Admin"){
+                if(auth()->user()->role->nama_role == "Super Admin" or auth()->user()->role->nama_role == "Admin"){
                     if($data->tgl_transaksi == date('Y-m-d')){
                         return $cetaknota.' '.$hapus;
                     }else{
@@ -283,11 +299,64 @@ class SimpananController extends Controller
                 }
             })
             ->addColumn('saldo', function ($data) {
-                $saldo_terakhir = Saldo_harian::where('anggota_id',$data->anggota_id)->latest()->first();
-                return 'Rp '.number_format($saldo_terakhir->saldo,0,',','.');
+                $simpanan_pokok = Saldo_harian::where([['anggota_id','=' , $data->anggota_id],['jenissimpanan_id' ,'=' ,1]])->orderBy('id','desc')->first();
+                $simpanan_wajib = Saldo_harian::where([['anggota_id','=' , $data->anggota_id],['jenissimpanan_id' ,'=' ,2]])->orderBy('id','desc')->first();
+                $simpanan_sukarela = Saldo_harian::where([['anggota_id','=' , $data->anggota_id],['jenissimpanan_id' ,'=' ,3]])->orderBy('id','desc')->first();
+                $simpanan_wajib_khusus = Saldo_harian::where([['anggota_id','=' , $data->anggota_id],['jenissimpanan_id' ,'=' ,4]])->orderBy('id','desc')->first();
+
+                if(!$simpanan_pokok){
+                    $sp = 0;
+                   
+                }else{
+                    $sp = $simpanan_pokok->saldo;
+                   
+                }
+
+                if(!$simpanan_wajib){
+                    $sw = 0;
+                }else{
+                    $sw = $simpanan_wajib->saldo;
+                }
+
+                if(!$simpanan_sukarela){
+                    
+                    $ss = 0;
+                }else{
+                    $ss = $simpanan_sukarela->saldo;
+                }
+
+                if(!$simpanan_wajib_khusus){
+                    $swk = 0;
+                }else{
+                    $swk = $simpanan_wajib_khusus->saldo;
+                }
+
+                $saldo_akhir = $sp+$sw+$ss+$swk;
+
+                return 'Rp '.number_format($saldo_akhir,0,',','.');
             })
             ->addIndexColumn()
             ->rawColumns(['debit','kredit','jenissimpanan','saldo','nama_anggota','action'])
             ->make(true);
+    }
+
+    public function getSimpananPokokAnggota($anggota_id){
+        $simpanan_pokok = Saldo_harian::where([['anggota_id','=' , $anggota_id],['jenissimpanan_id' ,'=' ,1]])->orderBy('id','desc')->first();
+        return response()->json($simpanan_pokok);
+    }
+
+    public function getSimpananWajibAnggota($anggota_id){
+        $simpanan_pokok = Saldo_harian::where([['anggota_id','=' , $anggota_id],['jenissimpanan_id' ,'=' ,2]])->orderBy('id','desc')->first();
+        return response()->json($simpanan_pokok);
+    }
+
+    public function getSimpananSukarelaAnggota($anggota_id){
+        $simpanan_pokok = Saldo_harian::where([['anggota_id','=' , $anggota_id],['jenissimpanan_id' ,'=' ,3]])->orderBy('id','desc')->first();
+        return response()->json($simpanan_pokok);
+    }
+
+    public function getSimpananKhususAnggota($anggota_id){
+        $simpanan_pokok = Saldo_harian::where([['anggota_id','=' , $anggota_id],['jenissimpanan_id' ,'=' ,4]])->orderBy('id','desc')->first();
+        return response()->json($simpanan_pokok);
     }
 }

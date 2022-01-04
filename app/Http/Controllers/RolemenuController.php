@@ -112,6 +112,9 @@ class RolemenuController extends Controller
     {
         $model = Role_menu::findOrFail($id);
         $model->delete();
+        return response()->json([
+                'status' => 'true',
+                'messages'=> 'Data Berhasil dihapus']);
     }
 
     public function dataTable()

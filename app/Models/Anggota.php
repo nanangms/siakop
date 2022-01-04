@@ -11,7 +11,7 @@ class Anggota extends Model
     use Uuid;
     use HasFactory;
     protected $table = 'anggota';
-    protected $fillable = ['no_anggota','nama_lengkap','t4_lahir','tgl_lahir','jenis_kelamin','agama_id','alamat','kota','kode_pos','no_hp','keterangan','status'];
+    protected $fillable = ['no_anggota','nik','nama_lengkap','t4_lahir','tgl_lahir','jenis_kelamin','agama_id','alamat','kota','kode_pos','no_hp','keterangan','status','uuid'];
 
     public function agama()
     {

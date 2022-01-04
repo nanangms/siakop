@@ -54,4 +54,13 @@
 		<td>:</td>
 		<td>{{$model->keterangan}}</td>
 	</tr>
+	<tr>
+		<td><strong>Status</strong></td>
+		<td>:</td>
+		<td>@if($model->status == 'AKTIF')
+                    <span class="badge badge-success">AKTIF</span>
+                @else
+                    <span class="badge badge-danger">TIDAK AKTIF</span>
+                @endif</td>
+	</tr>
 </table>

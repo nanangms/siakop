@@ -104,6 +104,9 @@ class KabupatenkotaController extends Controller
     {
         $model = Kabupatenkota::findOrFail($id);
         $model->delete();
+        return response()->json([
+                'status' => 'true',
+                'messages'=> 'Data Berhasil dihapus']);
     }
 
     public function dataTable()

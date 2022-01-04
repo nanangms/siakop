@@ -116,6 +116,9 @@ class JenissimpananController extends Controller
     {
         $model = Jenissimpanan::where('uuid',$id)->first();
         $model->delete();
+        return response()->json([
+                'status' => 'true',
+                'messages'=> 'Data Berhasil dihapus']);
     }
 
     public function dataTable()

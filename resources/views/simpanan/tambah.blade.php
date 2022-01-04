@@ -72,7 +72,75 @@ Tambah Simpanan
 
 
     <section class="content" id="data-simpanan">
-        <x-card judul="Data Simpanan">
+        <x-card judul="Riwayat Transaksi">
+            
+
+            <div class="row">
+              <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-info">
+                  <div class="inner">
+                    <h3><div id="simpanan_pokok"></div></h3>
+
+                    <p>Simpanan Pokok</p>
+                  </div>
+                  <div class="icon">
+                    <i class="ion ion-stats-bars"></i>
+                  </div>
+                </div>
+              </div>
+              <!-- ./col -->
+              <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-success">
+                  <div class="inner">
+                    <h3><div id="simpanan_wajib"></div>
+                    </h3>
+                    <p>Simpanan Wajib</p>
+                  </div>
+                  <div class="icon">
+                    <i class="ion ion-stats-bars"></i>
+                  </div>
+                </div>
+              </div>
+              <!-- ./col -->
+              <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-warning">
+                  <div class="inner">
+                    <h3><div id="simpanan_sukarela"></div>
+                        
+                    </h3>
+
+                    <p>Simpanan Sukarela</p>
+                  </div>
+                  <div class="icon">
+                    <i class="ion ion-stats-bars"></i>
+                  </div>
+                </div>
+              </div>
+              <!-- ./col -->
+              <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-danger">
+                  <div class="inner">
+                    <h3><div id="simpanan_wajib_khusus"></div>
+                    </h3>
+
+                    <p>Simpanan Wajib Khusus</p>
+                  </div>
+                  <div class="icon">
+                    <i class="ion ion-stats-bars"></i>
+                  </div>
+                </div>
+              </div>
+              <!-- ./col -->
+            </div>
+            <!-- /.row -->
+            <p align="right">
+                <a href="" class="btn btn-info"><i class="fa fa-print"></i> Rekening Koran</a>
+            </p>
+            <hr>
             <table id="datatable" class="table table-bordered table-hover table-striped">
                 <thead>
                     <tr>
@@ -81,7 +149,7 @@ Tambah Simpanan
                         <th colspan="1" rowspan="2">Jenis Simpanan</th>
                         <th colspan="1" rowspan="2">Uraian/Keterangan</th>
                         <th colspan="2" rowspan="1">Posisi Transaksi</th>
-                        <th colspan="1" rowspan="2">Saldo</th>
+                       
                     </tr>
                     <tr>
                         <th>Penarikan</th>
@@ -110,6 +178,34 @@ Tambah Simpanan
 <script src="{{asset('admin/plugins/datatables-buttons/js/dataTables.buttons.min.js')}}"></script>
 <script src="{{asset('admin/plugins/datatables-buttons/js/buttons.bootstrap4.min.js')}}"></script>
 <script>
+    function number_format (number, decimals, decPoint, thousandsSep) { 
+        number = (number + '').replace(/[^0-9+\-Ee.]/g, '')
+        var n = !isFinite(+number) ? 0 : +number
+        var prec = !isFinite(+decimals) ? 0 : Math.abs(decimals)
+        var sep = (typeof thousandsSep === 'undefined') ? '.' : thousandsSep
+        var dec = (typeof decPoint === 'undefined') ? ',' : decPoint
+        var s = ''
+
+        var toFixedFix = function (n, prec) {
+          var k = Math.pow(10, prec)
+          return '' + (Math.round(n * k) / k)
+            .toFixed(prec)
+        }
+
+        // @todo: for IE parseFloat(0.55).toFixed(0) = 0;
+        s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.')
+        if (s[0].length > 3) {
+          s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep)
+        }
+        if ((s[1] || '').length < prec) {
+          s[1] = s[1] || ''
+          s[1] += new Array(prec - s[1].length + 1).join('0')
+        }
+
+         return s.join(dec)
+    }
+</script>
+<script>
     $(document).ready( function () {
         $('.select2').select2();
         $('#jumlah').mask('000.000.000.000.000', {reverse: true});
@@ -133,8 +229,7 @@ Tambah Simpanan
                     {data: 'jenissimpanan', name: 'jenissimpanan'},
                     {data: 'keterangan', name: 'keterangan'},
                     {data: 'debit', name: 'debit',className: "text-right"},
-                    {data: 'kredit', name: 'kredit',className: "text-right"},
-                    {data: 'saldo', name: 'saldo',className: "text-right"}
+                    {data: 'kredit', name: 'kredit',className: "text-right"}
                 ]
             });
 
@@ -144,9 +239,52 @@ Tambah Simpanan
                 dataType: 'json',
                 success: function(response){
                     $("#data-simpanan").show();
-                    
                     if(response != null){
                         $('#nama_anggota').val(response.nama_lengkap);
+                    }
+                }
+            });
+
+            $.ajax({
+                url: "/get/simpanan-pokok/"+id,
+                type: 'get',
+                dataType: 'json',
+                success: function(response){
+                    if(response != null){
+                        $('#simpanan_pokok').text('Rp '+number_format(response.saldo)+' ,-');
+                    }
+                }
+            });
+
+            $.ajax({
+                url: "/get/simpanan-wajib/"+id,
+                type: 'get',
+                dataType: 'json',
+                success: function(response){
+                    if(response != null){
+                        $('#simpanan_wajib').text('Rp '+number_format(response.saldo)+' ,-');
+                    }
+                }
+            });
+
+            $.ajax({
+                url: "/get/simpanan-sukarela/"+id,
+                type: 'get',
+                dataType: 'json',
+                success: function(response){
+                    if(response != null){
+                        $('#simpanan_sukarela').text('Rp '+number_format(response.saldo)+' ,-');
+                    }
+                }
+            });
+
+            $.ajax({
+                url: "/get/simpanan-wajib-khusus/"+id,
+                type: 'get',
+                dataType: 'json',
+                success: function(response){
+                    if(response != null){
+                        $('#simpanan_wajib_khusus').text('Rp '+number_format(response.saldo)+' ,-');
                     }
                 }
             });

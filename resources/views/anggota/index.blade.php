@@ -29,7 +29,6 @@ Anggota Koperasi
                         <th>NIK</th>
                         <th>Nama Lengkap</th>
                         <th>Tempat, Tanggal Lahir</th>
-                        <th>Kota</th> 
                         <th>Status</th>
                         <th>Aksi</th>
                     </tr>
@@ -67,7 +66,6 @@ Anggota Koperasi
             {data: 'nik', name: 'nik'},
             {data: 'nama_lengkap', name: 'nama_lengkap'},
             {data: 'ttl', name: 'ttl'},
-            {data: 'kota', name: 'kota'},
             {data: 'status', name: 'status'},
             {data: 'action', name: 'action'}
         ]
